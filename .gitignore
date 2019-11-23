@@ -1,0 +1,19 @@
+
+# Godot-specific ignores
+.import/
+export.cfg
+export_presets.cfg
+.sconsign.dblite
+
+# Mono-specific ignores
+.mono/
+
+# nativescript
+/src/*.obj
+*.os
+*/bin/win64/*
+*/bin/x11/*
+
+.vs/
+.vscode/
+*.code-workspace
