@@ -1,5 +1,7 @@
 #include "player_handler.h"
 #include "map_handler.h"
+#include "main_menu.h"
+#include "testing.h"
 
 extern "C" void GDN_EXPORT godot_gdnative_init(godot_gdnative_init_options *o) {
     godot::Godot::gdnative_init(o);
@@ -14,4 +16,6 @@ extern "C" void GDN_EXPORT godot_nativescript_init(void *handle) {
     
     godot::register_class<godot::PlayerHandler>();
     godot::register_class<godot::MapHandler>();
+    godot::register_class<godot::MainMenu>();
+    godot::register_class<godot::Testing>();
 }

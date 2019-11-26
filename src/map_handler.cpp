@@ -18,7 +18,7 @@ bool Room::check_intersect(Room other) {
 void MapHandler::_register_methods() {
 	register_method("_process", &MapHandler::_process);
 	register_method("_ready", &MapHandler::_ready);
-	//register_method("_stairs_entered", &MapHandler::_stairs_entered);
+	register_method("_stairs_entered", &MapHandler::_stairs_entered);
 }
 
 MapHandler::MapHandler() {
@@ -30,19 +30,12 @@ MapHandler::~MapHandler() {
 void MapHandler::_ready() {
 	//set_cell(2, 2, 0); // 0 = grass. How to use get_tileset()->find_tile_by_name("grass")?
 	//rooms.push_back(Room(0, 3, 7, 3));
-	generate_rooms();
-	draw_rooms();
-	generate_paths();
-
-	update_bitmask_region(Vector2(0, 0), Vector2(map_size.x, map_size.y));
-
-	Object::cast_to<KinematicBody2D>(get_node("Player"))->set_position(Vector2(rooms[0].x * 16 + 8, rooms[0].y * 16 + 8));
-	//Object::cast_to<Area2D>(get_node("Stairs"))->set_position(Vector2(rooms[rooms.size() - 1].x * 16 + 8, rooms[rooms.size() - 1].y * 16 + 8));
-
-	//Node* stairs = get_node("Stairs");
-	//if (stairs) {
-	//	stairs->connect("area_entered", this, "_stairs_entered");
-	//}
+	make_map();
+	
+	Node* stairs = get_node("Stairs");
+	if (stairs) {
+		stairs->connect("area_entered", this, "_stairs_entered");
+	}
 }
 
 void MapHandler::_init() {
@@ -53,9 +46,14 @@ void MapHandler::_process(float delta) {
 
 }
 
-/*void MapHandler::_stairs_entered(Area2D* area) {
+void MapHandler::_stairs_entered(Area2D* area) {
 	Godot::print("stairs entered");
-}*/
+	String name = area->get_parent()->get_name();
+
+	if (name == "Player") {
+		make_map();
+	}
+}
 
 void MapHandler::generate_rooms() {
 	srand(time(NULL));
@@ -134,4 +132,24 @@ void MapHandler::draw_rooms() {
 		}
 	}
 
+}
+
+void MapHandler::make_map() {
+	clear_map();
+	generate_rooms();
+	draw_rooms();
+	generate_paths();
+
+	update_bitmask_region(Vector2(0, 0), Vector2(map_size.x, map_size.y));
+
+	Object::cast_to<KinematicBody2D>(get_node("Player"))->set_position(Vector2(rooms[0].x * 16 + 8, rooms[0].y * 16 + 8));
+	Object::cast_to<Area2D>(get_node("Stairs"))->set_position(Vector2(rooms[rooms.size() - 1].x * 16 + 8, rooms[rooms.size() - 1].y * 16 + 8));
+}
+
+void MapHandler::clear_map() {
+	rooms.clear();
+	for (int i = 0; i < map_size.x; ++i) {
+		for (int j = 0; j < map_size.y; ++j)
+			set_cell(i, j, -1);
+	}
 }

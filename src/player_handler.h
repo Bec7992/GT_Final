@@ -6,6 +6,7 @@
 #include <InputEventMouseMotion.hpp>
 #include <TileMap.hpp>
 #include <Input.hpp>
+#include "ability.h"
 
 namespace godot {
 
@@ -15,6 +16,8 @@ namespace godot {
 	private:
 		Vector2 position = Vector2(0, 0);
 		Vector2 target_pos = Vector2(0, 0);
+
+		Ability abil1;
 
 	public:
 		int tile_size = 16;

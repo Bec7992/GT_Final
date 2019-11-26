@@ -5,7 +5,7 @@
 #include <TileMap.hpp>
 #include <String.hpp>
 #include <KinematicBody2D.hpp>
-//#include <Area2D.hpp>
+#include <Area2D.hpp>
 #include <math.h> // floor
 #include <vector>
 #include <stdlib.h> //srand, rand
@@ -47,10 +47,12 @@ namespace godot {
 		void _init();
 		void _ready();
 		void _process(float delta);
-		//void _stairs_entered(Area2D* area);
+		void _stairs_entered(Area2D* area);
 		void generate_rooms();
 		void generate_paths();
 		void draw_rooms();
+		void make_map();
+		void clear_map();
 	};
 }
 

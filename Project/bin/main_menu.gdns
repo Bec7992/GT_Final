@@ -3,6 +3,6 @@
 [ext_resource path="res://bin/final.gdnlib" type="GDNativeLibrary" id=1]
 
 [resource]
-resource_name = "player_handler"
-class_name = "PlayerHandler"
+resource_name = "main_menu"
+class_name = "MainMenu"
 library = ExtResource( 1 )

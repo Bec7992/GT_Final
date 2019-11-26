@@ -20,6 +20,7 @@ void PlayerHandler::_ready() {
 	set_position(position);
 	target_pos = position;
 
+	abil1 = Ability(Around_user, Fire, 0, 3);
 }
 
 void PlayerHandler::_init() {

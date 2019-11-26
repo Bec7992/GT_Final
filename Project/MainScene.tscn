@@ -1,0 +1,77 @@
+[gd_scene load_steps=6 format=2]
+
+[ext_resource path="res://bin/main_menu.gdns" type="Script" id=1]
+[ext_resource path="res://SpringGrass.png" type="Texture" id=2]
+[ext_resource path="res://RobotoFont/Roboto-Black.ttf" type="DynamicFontData" id=3]
+
+[sub_resource type="DynamicFont" id=1]
+size = 120
+font_data = ExtResource( 3 )
+
+[sub_resource type="DynamicFont" id=2]
+size = 40
+font_data = ExtResource( 3 )
+
+[node name="Node" type="Node"]
+
+[node name="MainMenu" type="Control" parent="."]
+margin_right = 1280.0
+margin_bottom = 720.0
+size_flags_horizontal = 3
+size_flags_vertical = 3
+script = ExtResource( 1 )
+
+[node name="NinePatchRect" type="NinePatchRect" parent="MainMenu"]
+margin_right = 1280.0
+margin_bottom = 720.0
+size_flags_horizontal = 3
+size_flags_vertical = 3
+texture = ExtResource( 2 )
+
+[node name="Title" type="Label" parent="MainMenu"]
+margin_left = 273.0
+margin_top = 40.0
+margin_right = 979.0
+margin_bottom = 193.0
+size_flags_horizontal = 3
+size_flags_vertical = 7
+custom_fonts/font = SubResource( 1 )
+text = "Slime Dungeon"
+align = 1
+valign = 1
+
+[node name="PlayMain" type="Button" parent="MainMenu"]
+editor/display_folded = true
+margin_left = 460.0
+margin_top = 240.0
+margin_right = 810.0
+margin_bottom = 340.0
+
+[node name="Label" type="Label" parent="MainMenu/PlayMain"]
+anchor_right = 1.0
+margin_bottom = 100.0
+size_flags_horizontal = 3
+size_flags_vertical = 7
+custom_fonts/font = SubResource( 2 )
+text = "Play"
+align = 1
+valign = 1
+
+[node name="QuitMain" type="Button" parent="MainMenu"]
+editor/display_folded = true
+margin_left = 460.0
+margin_top = 483.353
+margin_right = 810.0
+margin_bottom = 583.353
+
+[node name="Label" type="Label" parent="MainMenu/QuitMain"]
+margin_left = 2.99994
+margin_top = 1.0
+margin_right = 353.0
+margin_bottom = 101.0
+size_flags_horizontal = 3
+size_flags_vertical = 7
+custom_fonts/font = SubResource( 2 )
+text = "Quit"
+align = 1
+valign = 1
