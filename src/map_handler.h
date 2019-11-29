@@ -6,11 +6,14 @@
 #include <String.hpp>
 #include <KinematicBody2D.hpp>
 #include <Area2D.hpp>
+#include <AStar.hpp>
+#include <Array.hpp>
 #include <math.h> // floor
 #include <vector>
 #include <stdlib.h> //srand, rand
 #include <time.h>
 #include <algorithm>
+//#include "base_ai.h"
 
 namespace godot {
 
@@ -34,10 +37,14 @@ namespace godot {
 	private:
 		std::vector<Room> rooms;
 
+		//std::vector<BaseAI*> enemies;
+
 	public:
 		Vector2 tile_size = get_cell_size();
 
 		Vector2 map_size = Vector2(40, 40);
+
+		AStar* astar;
 
 		static void _register_methods();
 
@@ -53,6 +60,12 @@ namespace godot {
 		void draw_rooms();
 		void make_map();
 		void clear_map();
+		void add_navigation();
+		int id_from_cell(Vector2 cell);
+		void place_enemies();
+		PoolVector3Array get_cell_path(Vector2 start, Vector2 end);
+
+		void player_took_turn();
 	};
 }
 

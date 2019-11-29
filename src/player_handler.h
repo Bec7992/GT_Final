@@ -6,7 +6,9 @@
 #include <InputEventMouseMotion.hpp>
 #include <TileMap.hpp>
 #include <Input.hpp>
+#include <chrono>
 #include "ability.h"
+//#include "map_handler.h"
 
 namespace godot {
 
@@ -16,6 +18,9 @@ namespace godot {
 	private:
 		Vector2 position = Vector2(0, 0);
 		Vector2 target_pos = Vector2(0, 0);
+		double time_elapsed = 0.0;
+		std::chrono::steady_clock::time_point begin = std::chrono::steady_clock::now();
+		bool just_moved = false;
 
 		Ability abil1;
 
@@ -32,6 +37,7 @@ namespace godot {
 		void _ready();
 		void _process(float delta);
 		void _physics_process(float delta);
+		void _movement_process();
 	};
 }
 

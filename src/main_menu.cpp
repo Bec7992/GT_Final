@@ -3,11 +3,11 @@
 using namespace godot;
 
 void MainMenu::_register_methods() {
-
-    //register_method("_ready", &MainMenu::_ready);
-    //register_method("_process", &MainMenu::_process);
-    //register_method("_on_PlayMain_pressed", &MainMenu::_on_PlayMain_pressed);
-    //register_method("_on_QuitButton_pressed", &MainMenu::_on_QuitButton_pressed);
+	register_method("_init", &MainMenu::_init);
+    register_method("_ready", &MainMenu::_ready);
+    register_method("_process", &MainMenu::_process);
+    register_method("_on_PlayMain_pressed", &MainMenu::_on_PlayMain_pressed);
+    register_method("_on_QuitButton_pressed", &MainMenu::_on_QuitButton_pressed);
 }
 
 MainMenu::MainMenu() {
@@ -17,7 +17,11 @@ MainMenu::~MainMenu() {
 
 }
 
-/*void MainMenu::_ready() {
+void MainMenu::_init() {
+
+}
+
+void MainMenu::_ready() {
 	Godot::print("ready: start");
 	Control* main_menu = Object::cast_to<Control>(get_parent()->get_node("MainMenu"));
     if (main_menu) {
@@ -57,4 +61,4 @@ void MainMenu::_on_PlayMain_pressed() {
 
 void MainMenu::_on_QuitButton_pressed() {
 	get_tree()->quit();
-}*/
+}

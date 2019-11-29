@@ -23,13 +23,15 @@ namespace godot {
 	    MainMenu();
 	    ~MainMenu();
 
-	    //void _ready();
+	    void _init();
 
-	    //void _process();
+	    void _ready();
 
-	    //void _on_PlayMain_pressed();
+	    void _process();
 
-	    //void _on_QuitButton_pressed();
+	    void _on_PlayMain_pressed();
+
+	    void _on_QuitButton_pressed();
 	};
 }
 
