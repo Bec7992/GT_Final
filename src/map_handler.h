@@ -8,12 +8,17 @@
 #include <Area2D.hpp>
 #include <AStar.hpp>
 #include <Array.hpp>
+#include <ResourceLoader.hpp>
+#include <Ref.hpp>
+#include <PackedScene.hpp>
 #include <math.h> // floor
 #include <vector>
 #include <stdlib.h> //srand, rand
 #include <time.h>
 #include <algorithm>
-//#include "base_ai.h"
+#include "base_ai.h"
+
+//class BaseAI;
 
 namespace godot {
 
@@ -37,14 +42,18 @@ namespace godot {
 	private:
 		std::vector<Room> rooms;
 
-		//std::vector<BaseAI*> enemies;
+		std::vector<BaseAI*> enemies;
 
 	public:
 		Vector2 tile_size = get_cell_size();
 
 		Vector2 map_size = Vector2(40, 40);
 
+		int floor_level = 0;
+
 		AStar* astar;
+
+		bool enemy_has_died = false;
 
 		static void _register_methods();
 
@@ -64,8 +73,13 @@ namespace godot {
 		int id_from_cell(Vector2 cell);
 		void place_enemies();
 		PoolVector3Array get_cell_path(Vector2 start, Vector2 end);
+		PoolVector3Array get_path_to_player(Vector2 start);
+		PoolVector3Array get_path_random(Vector2 start);
 
-		void player_took_turn();
+		Vector2 get_player_cell();
+		std::vector<BaseAI*> get_enemies();
+		Vector3 get_enemy_index_at_location(Vector2 mouse_location);
+		void enemy_death(Vector2 position);
 	};
 }
 

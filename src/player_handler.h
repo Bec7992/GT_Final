@@ -3,12 +3,13 @@
 
 #include <Godot.hpp>
 #include <KinematicBody2D.hpp>
-#include <InputEventMouseMotion.hpp>
+#include <InputEventMouseButton.hpp>
 #include <TileMap.hpp>
 #include <Input.hpp>
 #include <chrono>
 #include "ability.h"
-//#include "map_handler.h"
+#include "map_handler.h"
+#include "health_bar.h"
 
 namespace godot {
 
@@ -23,10 +24,15 @@ namespace godot {
 		bool just_moved = false;
 
 		Ability abil1;
+		int ability_index = 0;
+		bool ability_targeting = false;
 
 	public:
 		int tile_size = 16;
 		int speed = 256;
+		int health = 100;
+
+		std::vector<BaseAI*> enemies;
 
 		static void _register_methods();
 
@@ -38,6 +44,12 @@ namespace godot {
 		void _process(float delta);
 		void _physics_process(float delta);
 		void _movement_process();
+		void enemy_turns();
+		void _stairs_entered(Area2D* area);
+		void change_health(int change);
+		void recieve_ability(Ability enemy_ability);
+		void death();
+		void enemy_death(int index);
 	};
 }
 

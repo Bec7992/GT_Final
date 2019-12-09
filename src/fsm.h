@@ -1,22 +1,22 @@
 #ifndef FSM_H
 #define FSM_H
-#include <Node.hpp>
+#include <Node2D.hpp>
 
 namespace godot {
     class AbstractState {
 
     public:
-        virtual void start(Node* parent) {}
-        virtual void execute(Node* parent) {}
-        virtual void end(Node* parent) {}
+        virtual void start(Node2D* parent) {}
+        virtual void execute(Node2D* parent) {}
+        virtual void end(Node2D* parent) {}
     };
 
     class FSM { 
 
     public:
         AbstractState* state = nullptr;
-        void update(Node* parent);
-        void set_state(Node* parent, AbstractState* new_state);
+        void update(Node2D* parent);
+        void set_state(Node2D* parent, AbstractState* new_state);
     };
 }
 

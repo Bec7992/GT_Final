@@ -1,18 +1,11 @@
-[gd_scene load_steps=10 format=2]
+[gd_scene load_steps=6 format=2]
 
 [ext_resource path="res://grass.tres" type="TileSet" id=1]
-[ext_resource path="res://icon.png" type="Texture" id=2]
+[ext_resource path="res://bin/map_handler.gdns" type="Script" id=2]
 [ext_resource path="res://stairs_32x32_EVEN EVEN MOAR SHADOW.png" type="Texture" id=3]
-[ext_resource path="res://bin/base_ai.gdns" type="Script" id=4]
-[ext_resource path="res://MainMenu.tscn" type="PackedScene" id=5]
+[ext_resource path="res://player.tscn" type="PackedScene" id=4]
 
 [sub_resource type="RectangleShape2D" id=1]
-
-[sub_resource type="RectangleShape2D" id=2]
-
-[sub_resource type="RectangleShape2D" id=3]
-
-[sub_resource type="RectangleShape2D" id=4]
 
 [node name="Node" type="Node"]
 
@@ -22,52 +15,16 @@ cell_size = Vector2( 16, 16 )
 cell_y_sort = true
 collision_use_kinematic = true
 format = 1
-
-[node name="Player" type="KinematicBody2D" parent="TileMap"]
-position = Vector2( 8, 8 )
-
-[node name="Sprite" type="Sprite" parent="TileMap/Player"]
-scale = Vector2( 0.163, 0.163 )
-texture = ExtResource( 2 )
-
-[node name="CollisionShape2D" type="CollisionShape2D" parent="TileMap/Player"]
-shape = SubResource( 1 )
-
-[node name="Camera2D" type="Camera2D" parent="TileMap/Player"]
-current = true
-limit_left = 0
-limit_top = 0
-limit_smoothed = true
-smoothing_enabled = true
-
-[node name="PlayerArea" type="Area2D" parent="TileMap/Player"]
-editor/display_folded = true
-
-[node name="CollisionShape2D" type="CollisionShape2D" parent="TileMap/Player/PlayerArea"]
-shape = SubResource( 2 )
+script = ExtResource( 2 )
 
 [node name="Stairs" type="Area2D" parent="TileMap"]
 editor/display_folded = true
 scale = Vector2( 0.5, 0.5 )
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="TileMap/Stairs"]
-shape = SubResource( 3 )
+shape = SubResource( 1 )
 
 [node name="Sprite" type="Sprite" parent="TileMap/Stairs"]
 texture = ExtResource( 3 )
 
-[node name="Enemy" type="KinematicBody2D" parent="TileMap"]
-editor/display_folded = true
-position = Vector2( 8, 8 )
-
-[node name="CollisionShape2D" type="CollisionShape2D" parent="TileMap/Enemy"]
-shape = SubResource( 4 )
-
-[node name="Sprite" type="Sprite" parent="TileMap/Enemy"]
-scale = Vector2( 0.163, 0.163 )
-texture = ExtResource( 2 )
-script = ExtResource( 4 )
-
-[node name="MainMenu" parent="." instance=ExtResource( 5 )]
-pause_mode = 2
-visible = false
+[node name="Player" parent="TileMap" instance=ExtResource( 4 )]

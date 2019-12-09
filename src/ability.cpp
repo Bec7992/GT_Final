@@ -6,7 +6,7 @@ Ability::Ability() {
 
 }
 
-Ability::Ability(Target target, Element element, int range, int radius) : 
-	target(target), element(element), range(range), radius(radius) {
+Ability::Ability(String name, Target target, Element element, int damage, int range, int radius, int cooldown) : 
+	name(name), target(target), element(element), damage(damage), range(range), radius(radius), cooldown(cooldown) {
 
 }

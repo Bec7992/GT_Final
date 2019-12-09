@@ -10,13 +10,17 @@ namespace godot {
     class Ability { 
 
     public:
+    	String name;
         Target target;
         Element element;
+        int damage;
         int range;
         int radius;
+        int cooldown;
+        int cooldown_left = 3;
 
         Ability();
-        Ability(Target target, Element element, int range, int radius);
+        Ability(String name, Target target, Element element, int damage, int range, int radius, int cooldown);
     };
 }
 
