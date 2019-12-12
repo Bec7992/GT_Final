@@ -134,7 +134,7 @@ void BaseAI::_ready() {
 		texture = resourceLoader->load("res://blue1.png");
 		Object::cast_to<Sprite>(get_node("Sprite"))->set_texture(texture);
 	}
-	else if (rand() % 2) {
+	else {
 		Godot::print("Earth Slime");
 		element = Earth;
 		abil1 = Ability("Earth Ball", "EarthBall", Around_user, Earth, 5, 3, 2, 3);

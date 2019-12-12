@@ -172,7 +172,7 @@ void MapHandler::make_map() {
 		Godot::print("does not have player");*/
 	Object::cast_to<KinematicBody2D>(get_node("Player"))->set_position(Vector2(rooms[0].x * 16 + 8, rooms[0].y * 16 + 8));
 	//Godot::print("about to place stairs");
-	Object::cast_to<Area2D>(get_node("Stairs"))->set_position(Vector2((rand() % (rooms[rooms.size() - 1].width) + rooms[rooms.size() - 1].x) * 16 + 8, (rand() % (rooms[rooms.size() - 1].width) + (rooms[rooms.size() - 1].y)) * 16 + 8));
+	Object::cast_to<Area2D>(get_node("Stairs"))->set_position(Vector2((rand() % (rooms[rooms.size() - 1].width) + rooms[rooms.size() - 1].x) * 16 + 8, (rand() % (rooms[rooms.size() - 1].height) + (rooms[rooms.size() - 1].y)) * 16 + 8));
 	//Godot::print("about to place enemies");
 	place_enemies();
 }

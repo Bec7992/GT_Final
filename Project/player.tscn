@@ -10,7 +10,7 @@
 
 [sub_resource type="RectangleShape2D" id=1]
 
-[sub_resource type="DynamicFont" id=4]
+[sub_resource type="DynamicFont" id=2]
 size = 25
 font_data = ExtResource( 3 )
 
@@ -30,6 +30,7 @@ shape = SubResource( 1 )
 
 [node name="Camera2D" type="Camera2D" parent="."]
 current = true
+zoom = Vector2( 0.25, 0.25 )
 limit_left = 0
 limit_top = 0
 limit_smoothed = true
@@ -41,7 +42,7 @@ margin_left = -56.0
 margin_top = -20.0
 margin_right = 69.0
 margin_bottom = 11.0
-custom_fonts/font = SubResource( 4 )
+custom_fonts/font = SubResource( 2 )
 custom_colors/font_color = Color( 0.847059, 0.117647, 0.117647, 1 )
 text = "Game Over"
 
