@@ -110,28 +110,34 @@ void MapHandler::generate_paths() {
 		int path_y = 0; // the y coord the horizontal path will start from
 
 		//Godot::print("gen_paths: loop");
-		if (1) {//rand() % 2) { // generate horizontal path first
+		if (rand() % 2 == 1) { // generate horizontal path first
 			//Godot::print("gen_paths: in if(1)");
 			path_y = rand() % ((old_room.y + old_room.height - 1) - (old_room.y + 1) + 1) + (old_room.y + 1);
 			path_x = rand() % ((rooms[i].x + rooms[i].width - 1) - (rooms[i].x + 1) + 1) + (rooms[i].x + 1);
 
 			// check if no need for h path
-			if (!(path_x >= old_room.x - 1 && path_x <= old_room.x + old_room.width + 1)) {
+			//if (!(path_x >= old_room.x - 1 && path_x <= old_room.x + old_room.width + 1)) {
 				//Godot::print("gen_paths: about to draw h path");
 				for (int j = std::min(old_room.x, path_x); j <= std::max(old_room.x, path_x); ++j)
 					set_cell(j, path_y, 0); // draw horizontal path
-			}
+			//}
 
 			// check if no need for v path
-			if (!(path_y >= rooms[i].y - 1 && path_y <= rooms[i].y + rooms[i].height + 1)) {
+			//if (!(path_y >= rooms[i].y - 1 && path_y <= rooms[i].y + rooms[i].height + 1)) {
 				//Godot::print("gen_paths: about to draw v paths");
 				for (int j = std::min(rooms[i].y, path_y); j <= std::max(rooms[i].y, path_y); ++j)
 					set_cell(path_x, j, 0); // draw vertical path
-			}
+			//}
 		}
 		else { // generate vertical path first
 			path_y = rand() % ((rooms[i].y + rooms[i].height - 1) - (rooms[i].y + 1) + 1) + (rooms[i].y + 1);
 			path_x = rand() % ((old_room.x + old_room.width - 1) - (old_room.x + 1) + 1) + (old_room.x + 1);
+
+			for (int j = std::min(old_room.y, path_y); j <= std::max(old_room.y, path_y); ++j)
+				set_cell(path_x, j, 0); // draw vertical path
+
+			for (int j = std::min(rooms[i].x, path_x); j <= std::max(rooms[i].x, path_x); ++j)
+				set_cell(j, path_y, 0); // draw horizontal path
 		}
 
 		old_room = rooms[i];
@@ -166,7 +172,7 @@ void MapHandler::make_map() {
 		Godot::print("does not have player");*/
 	Object::cast_to<KinematicBody2D>(get_node("Player"))->set_position(Vector2(rooms[0].x * 16 + 8, rooms[0].y * 16 + 8));
 	//Godot::print("about to place stairs");
-	Object::cast_to<Area2D>(get_node("Stairs"))->set_position(Vector2(rooms[rooms.size() - 1].x * 16 + 8, rooms[rooms.size() - 1].y * 16 + 8));
+	Object::cast_to<Area2D>(get_node("Stairs"))->set_position(Vector2((rand() % (rooms[rooms.size() - 1].width) + rooms[rooms.size() - 1].x) * 16 + 8, (rand() % (rooms[rooms.size() - 1].width) + (rooms[rooms.size() - 1].y)) * 16 + 8));
 	//Godot::print("about to place enemies");
 	place_enemies();
 }
