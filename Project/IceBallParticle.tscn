@@ -1,0 +1,51 @@
+[gd_scene load_steps=8 format=2]
+
+[sub_resource type="Gradient" id=1]
+offsets = PoolRealArray( 0.00294118, 0.147059, 0.364706, 0.688235, 1 )
+colors = PoolColorArray( 0.747681, 0.976562, 0.944376, 1, 0.674637, 0.856016, 0.964844, 1, 0.388199, 0.694541, 0.964844, 1, 0.337753, 0.521101, 0.910156, 1, 0.230469, 0.440887, 1, 1 )
+
+[sub_resource type="GradientTexture" id=2]
+gradient = SubResource( 1 )
+
+[sub_resource type="Curve" id=3]
+min_value = -400.0
+max_value = 400.0
+_data = [ Vector2( 0, 396.488 ), 0.0, 5285.56, 0, 0, Vector2( 0.137609, 5.76758 ), -1498.05, -1498.05, 0, 0, Vector2( 1, -131.512 ), 755.686, 0.0, 0, 0 ]
+
+[sub_resource type="CurveTexture" id=4]
+curve = SubResource( 3 )
+
+[sub_resource type="Curve" id=5]
+max_value = 2.5
+_data = [ Vector2( 0, 2.416 ), 0.0, 0.0, 0, 0, Vector2( 1, 0.678 ), 0.0, 0.0, 0, 0 ]
+
+[sub_resource type="CurveTexture" id=6]
+curve = SubResource( 5 )
+
+[sub_resource type="ParticlesMaterial" id=7]
+emission_shape = 1
+emission_sphere_radius = 2.0
+flag_disable_z = true
+spread = 180.0
+gravity = Vector3( 0, 0, 0 )
+initial_velocity = 100.0
+initial_velocity_random = 0.5
+orbit_velocity = 0.0
+orbit_velocity_random = 0.0
+linear_accel = 100.0
+linear_accel_random = 0.2
+linear_accel_curve = SubResource( 4 )
+scale = 2.0
+scale_random = 1.0
+scale_curve = SubResource( 6 )
+color_ramp = SubResource( 2 )
+
+[node name="IceBall" type="Node2D"]
+z_index = 1
+
+[node name="IceBall" type="Particles2D" parent="."]
+emitting = false
+amount = 200
+lifetime = 0.5
+explosiveness = 0.5
+process_material = SubResource( 7 )

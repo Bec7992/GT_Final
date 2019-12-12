@@ -11,6 +11,7 @@ namespace godot {
 
     public:
     	String name;
+        String particle_name;
         Target target;
         Element element;
         int damage;
@@ -20,7 +21,7 @@ namespace godot {
         int cooldown_left = 3;
 
         Ability();
-        Ability(String name, Target target, Element element, int damage, int range, int radius, int cooldown);
+        Ability(String name, String particle_name, Target target, Element element, int damage, int range, int radius, int cooldown);
     };
 }
 

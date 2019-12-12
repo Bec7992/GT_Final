@@ -62,12 +62,12 @@ void MapHandler::_process(float delta) {
 }
 
 void MapHandler::_stairs_entered(Area2D* area) {
-	Godot::print("stairs entered");
-	++floor_level;
-	map_size = Vector2(map_size.x + (5 * floor_level), map_size.y + (5 * floor_level));
 
 	String name = area->get_parent()->get_name();
 	if (name == "Player") {
+		Godot::print("stairs entered");
+		++floor_level;
+		map_size = Vector2(map_size.x + (2 * floor_level), map_size.y + (2 * floor_level));
 		make_map();
 	}
 }
@@ -231,13 +231,20 @@ void MapHandler::place_enemies() {
 		add_child(enemy);
 		enemy->set_position(Vector2(cell.x * 16 + 8, cell.y * 16 + 8));
 		enemies.push_back(Object::cast_to<BaseAI>(enemy));
+		cell = used_cells[rand() % ((used_cells.size() - 1) + 1)];
 	}
 }
 
 PoolVector3Array MapHandler::get_cell_path(Vector2 start, Vector2 end) {
 	PoolVector3Array path_map = {};
 	if (astar->has_point(id_from_cell(start)) && astar->has_point(id_from_cell(end))) {
+		//Godot::print("get_cell_path: has points");
 		path_map = astar->get_point_path(id_from_cell(start), id_from_cell(end));
+	}
+	else {
+		//Godot::print("get_cell_path: doesn't have points");
+		//Godot::print("	start = " + start);
+		//Godot::print("	end = " + end);
 	}
 
 	return path_map;
@@ -248,7 +255,7 @@ PoolVector3Array MapHandler::get_cell_path(Vector2 start, Vector2 end) {
 }
 
 PoolVector3Array MapHandler::get_path_to_player(Vector2 start) {
-	Array used_cells = get_used_cells();
+	//Array used_cells = get_used_cells();
 	Vector2 player_cell = get_player_cell();
 	//Godot::print("start = " + start);
 	//Godot::print("end = " + player_cell);
@@ -259,7 +266,7 @@ PoolVector3Array MapHandler::get_path_to_player(Vector2 start) {
 PoolVector3Array MapHandler::get_path_random(Vector2 start) {
 	Array used_cells = get_used_cells();
 	//Vector2 start = used_cells[rand() % (used_cells.size() + 1)];
-	Vector2 end = used_cells[rand() % (used_cells.size() + 1)];
+	Vector2 end = used_cells[rand() % (used_cells.size())];
 	//Godot::print("start = " + start);
 	//Godot::print("end = " + end);
 	return get_cell_path(start, end);
@@ -278,10 +285,12 @@ std::vector<BaseAI*> MapHandler::get_enemies() {
 
 Vector3 MapHandler::get_enemy_index_at_location(Vector2 mouse_location) {
 	Vector2 click_cell = Vector2(floor(mouse_location.x / 16), floor(mouse_location.y / 16));
+	//Godot::print("click_cell = " + click_cell);
 	for (int i = 0; i < enemies.size(); ++i) {
-		Vector2 enemy_position = enemies[0]->get_position();
+		Vector2 enemy_position = enemies[i]->get_position();
 		enemy_position.x = floor(enemy_position.x / 16);
 		enemy_position.y = floor(enemy_position.y / 16);
+		//Godot::print("enemy_cell = " + enemy_position);
 
 		if (click_cell == enemy_position) {
 			return Vector3(enemy_position.x, enemy_position.y, i);

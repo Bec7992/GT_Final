@@ -9,6 +9,7 @@ void PlayerHandler::_register_methods() {
 	register_method("_movement_process", &PlayerHandler::_movement_process);
 	register_method("_ready", &PlayerHandler::_ready);
 	register_method("_stairs_entered", &PlayerHandler::_stairs_entered);
+	register_method("_particle_timeout", &PlayerHandler::_particle_timeout);
 }
 
 PlayerHandler::PlayerHandler() {
@@ -22,11 +23,16 @@ void PlayerHandler::_ready() {
 	set_position(position);
 	target_pos = position;
 
-	abil1 = Ability("Fire Ball", Around_user, Fire, 20, 7, 3, 3);
+	abil1 = Ability("Fire Ball", "FireBall", Around_user, Fire, 20, 7, 3, 3);
 
 	Node* stairs = get_parent()->get_node("Stairs");
 	if (stairs) {
 		stairs->connect("area_entered", this, "_stairs_entered");
+	}
+
+	Node* timer = get_node("Timer");
+	if (timer) {
+		timer->connect("timeout", this, "_particle_timeout");
 	}
 
 	//Object::cast_to<HealthBar>(get_node("HealthBar"))->on_health_update(health);
@@ -91,7 +97,7 @@ void PlayerHandler::_physics_process(float delta) {
 			if(i->is_action_just_pressed("click")) {
 				Godot::print("ability_targeting click");
 				Vector3 enemy_index = Object::cast_to<MapHandler>(get_parent())->get_enemy_index_at_location(get_global_mouse_position());
-				
+				Godot::print("enemy_index = " + enemy_index);
 				if (enemy_index.z > -1) {
 					Vector2 player_pos = get_global_position();
 					player_pos.x = floor(player_pos.x / 16);
@@ -145,6 +151,7 @@ void PlayerHandler::_movement_process() {
 }
 
 void PlayerHandler::enemy_turns() {
+	change_health(-1);
 	if (enemies.size() == 0)
 		enemies = Object::cast_to<MapHandler>(get_parent())->get_enemies();
 
@@ -178,6 +185,8 @@ void PlayerHandler::change_health(int change) {
 }
 
 void PlayerHandler::recieve_ability(Ability enemy_ability) {
+	Object::cast_to<Particles2D>(get_node(enemy_ability.particle_name + "/" + enemy_ability.particle_name))->set_emitting(true);
+	Object::cast_to<Timer>(get_node("Timer"))->start(1);
 	change_health(enemy_ability.damage);
 }
 
@@ -189,4 +198,8 @@ void PlayerHandler::death() {
 
 void PlayerHandler::enemy_death(int index) {
 	enemies.erase(enemies.begin()+index);
+}
+
+void PlayerHandler::_particle_timeout() {
+	Object::cast_to<Particles2D>(get_node("FireBall/FireBall"))->set_emitting(false);
 }

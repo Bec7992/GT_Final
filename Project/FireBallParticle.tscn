@@ -1,0 +1,50 @@
+[gd_scene load_steps=8 format=2]
+
+[sub_resource type="Gradient" id=1]
+offsets = PoolRealArray( 0.00294118, 0.147059, 0.364706, 0.688235, 1 )
+colors = PoolColorArray( 1, 0.992157, 0.713726, 1, 1, 0.878431, 0.105882, 1, 0.866667, 0.345098, 0.117647, 1, 0.917647, 0.243137, 0.109804, 1, 1, 0, 0, 1 )
+
+[sub_resource type="GradientTexture" id=2]
+gradient = SubResource( 1 )
+
+[sub_resource type="Curve" id=3]
+min_value = -400.0
+max_value = 400.0
+_data = [ Vector2( 0, 396.488 ), 0.0, 5285.56, 0, 0, Vector2( 0.137609, 5.76758 ), -1498.05, -1498.05, 0, 0, Vector2( 1, -131.512 ), 755.686, 0.0, 0, 0 ]
+
+[sub_resource type="CurveTexture" id=4]
+curve = SubResource( 3 )
+
+[sub_resource type="Curve" id=5]
+max_value = 2.5
+_data = [ Vector2( 0, 2.416 ), 0.0, 0.0, 0, 0, Vector2( 1, 0.678 ), 0.0, 0.0, 0, 0 ]
+
+[sub_resource type="CurveTexture" id=6]
+curve = SubResource( 5 )
+
+[sub_resource type="ParticlesMaterial" id=7]
+emission_shape = 1
+emission_sphere_radius = 2.0
+flag_disable_z = true
+spread = 180.0
+gravity = Vector3( 0, 0, 0 )
+initial_velocity = 100.0
+initial_velocity_random = 0.5
+orbit_velocity = 0.0
+orbit_velocity_random = 0.0
+linear_accel = 100.0
+linear_accel_random = 0.2
+linear_accel_curve = SubResource( 4 )
+scale = 2.0
+scale_random = 1.0
+scale_curve = SubResource( 6 )
+color_ramp = SubResource( 2 )
+
+[node name="FireBall" type="Node2D"]
+z_index = 1
+
+[node name="FireBall" type="Particles2D" parent="."]
+emitting = false
+amount = 200
+explosiveness = 0.5
+process_material = SubResource( 7 )

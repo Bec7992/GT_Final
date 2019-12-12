@@ -9,6 +9,8 @@
 #include <Viewport.hpp>
 #include <AStar.hpp>
 #include <Area2D.hpp>
+#include <Particles2D.hpp>
+#include <Timer.hpp>
 #include <string>
 #include "fsm.h"
 #include "health_bar.h"
@@ -21,7 +23,7 @@ namespace godot {
 	class WanderState : public AbstractState {
 	public:
         PoolVector3Array path;
-        int path_index = 1;
+        int path_index = 0;
         int tile_size = 16;
 
 		void start(Node2D* parent) override;
@@ -80,6 +82,7 @@ namespace godot {
         void recieve_ability(Ability ability);
         void _area_entered(Area2D* area);
         void _area_exited(Area2D* area);
+        void _particle_timeout();
 	};
 }
 

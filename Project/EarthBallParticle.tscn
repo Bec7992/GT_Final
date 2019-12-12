@@ -1,0 +1,50 @@
+[gd_scene load_steps=8 format=2]
+
+[sub_resource type="Gradient" id=1]
+offsets = PoolRealArray( 0.00294118, 0.147059, 0.364706, 0.688235, 1 )
+colors = PoolColorArray( 0.445312, 0.271362, 0, 1, 0.59375, 0.367252, 0.013916, 1, 0.710938, 0.439736, 0.0166626, 1, 0.792969, 0.524354, 0.105316, 1, 0.804688, 0.525964, 0.091156, 1 )
+
+[sub_resource type="GradientTexture" id=2]
+gradient = SubResource( 1 )
+
+[sub_resource type="Curve" id=3]
+min_value = -400.0
+max_value = 400.0
+_data = [ Vector2( 0, 396.488 ), 0.0, 5285.56, 0, 0, Vector2( 0.137609, 5.76758 ), -1498.05, -1498.05, 0, 0, Vector2( 1, -131.512 ), 755.686, 0.0, 0, 0 ]
+
+[sub_resource type="CurveTexture" id=4]
+curve = SubResource( 3 )
+
+[sub_resource type="Curve" id=5]
+max_value = 2.5
+_data = [ Vector2( 0, 2.416 ), 0.0, 0.0, 0, 0, Vector2( 1, 0.678 ), 0.0, 0.0, 0, 0 ]
+
+[sub_resource type="CurveTexture" id=6]
+curve = SubResource( 5 )
+
+[sub_resource type="ParticlesMaterial" id=7]
+emission_shape = 1
+emission_sphere_radius = 2.0
+flag_disable_z = true
+spread = 180.0
+gravity = Vector3( 0, 0, 0 )
+initial_velocity = 100.0
+initial_velocity_random = 0.5
+orbit_velocity = 0.0
+orbit_velocity_random = 0.0
+linear_accel = 100.0
+linear_accel_random = 0.2
+linear_accel_curve = SubResource( 4 )
+scale = 2.0
+scale_random = 1.0
+scale_curve = SubResource( 6 )
+color_ramp = SubResource( 2 )
+
+[node name="EarthBall" type="Node2D"]
+z_index = 1
+
+[node name="EarthBall" type="Particles2D" parent="."]
+emitting = false
+amount = 200
+explosiveness = 0.5
+process_material = SubResource( 7 )

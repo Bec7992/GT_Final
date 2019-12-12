@@ -50,6 +50,7 @@ namespace godot {
 		void recieve_ability(Ability enemy_ability);
 		void death();
 		void enemy_death(int index);
+		void _particle_timeout();
 	};
 }
 

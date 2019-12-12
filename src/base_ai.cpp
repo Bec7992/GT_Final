@@ -19,12 +19,13 @@ void WanderState::execute(Node2D* parent) {
     map_position.y = floor(map_position.y);
     if (path.size() <= path_index) {
     	while (path.size() <= path_index) {
-    		//Godot::print("path.size() = " + String::num_int64(path.size()));
+    		//Godot::print("wander path.size() = " + String::num_int64(path.size()));
     		path = Object::cast_to<MapHandler>(parent->get_node("/root/Node/TileMap"))->get_path_random(Vector2(map_position.x, map_position.y));
-    		path_index = 1;
+    		path_index = 0;
     	}
-    	path_index = 1;
+    	//path_index = 1;
     }
+    Godot::print("path index = " + String::num_int64(path_index));
 
 	Vector2 direction = Vector2(path[path_index].x, path[path_index].y) - (map_position);
 	Vector2 new_position = world_position + (direction * tile_size);
@@ -59,6 +60,10 @@ void AttackState::execute(Node2D* parent) {
     }
     else {
 	    path = Object::cast_to<MapHandler>(parent->get_node("/root/Node/TileMap"))->get_path_to_player(Vector2(map_position.x, map_position.y));
+	    while (path.size() == 0) {
+	    	//Godot::print("path size = " + String::num_int64(path.size()));
+	    	path = Object::cast_to<MapHandler>(parent->get_node("/root/Node/TileMap"))->get_path_to_player(Vector2(map_position.x, map_position.y));
+	    }
 	    Godot::print("path size = " + String::num_int64(path.size()));
 	    Vector2 direction = Vector2(path[1].x, path[1].y) - (map_position);
 		Vector2 new_position = world_position + (direction * tile_size);
@@ -89,6 +94,7 @@ void BaseAI::_register_methods() {
 	register_method("_physics_process", &BaseAI::_physics_process);
 	register_method("_area_entered", &BaseAI::_area_entered);
 	register_method("_area_exited", &BaseAI::_area_exited);
+	register_method("_particle_timeout", &BaseAI::_particle_timeout);
 }
 
 BaseAI::BaseAI() {
@@ -106,12 +112,17 @@ void BaseAI::_init() {
 void BaseAI::_ready() {
 	brain.set_state(this, &wanderState);
 
-	abil1 = Ability("Fire Ball", Around_user, Fire, 20, 5, 3, 3);
+	abil1 = Ability("Fire Ball", "FireBall", Around_user, Fire, 5, 3, 2, 3);
 
 	Node* area = get_node("EnemyArea");
 	if (area) {
 		area->connect("area_entered", this, "_area_entered");
 		area->connect("area_exited", this, "_area_exited");
+	}
+
+	Node* timer = get_node("Timer");
+	if (timer) {
+		timer->connect("timeout", this, "_particle_timeout");
 	}
 }
 
@@ -140,12 +151,7 @@ void BaseAI::change_health(int change) {
 	else {
 		health -= change;
 	}
-
-	if (health <= 0) {
-		death();
-	}
-	else
-		Object::cast_to<HealthBar>(get_node("HealthBar"))->on_health_update(health);
+	Object::cast_to<HealthBar>(get_node("HealthBar"))->on_health_update(health);
 }
 
 void BaseAI::death() {
@@ -156,6 +162,10 @@ void BaseAI::death() {
 void BaseAI::recieve_ability(Ability ability) {
 	//Godot::print("recieve_ability");
 	//Godot::print("damage = " + String::num_int64(ability.damage));
+	Godot::print("about to set emitting true");
+	Object::cast_to<Particles2D>(get_node(ability.particle_name + "/" + ability.particle_name))->set_emitting(true);
+	Godot::print("set emitting true");
+	Object::cast_to<Timer>(get_node("Timer"))->start(1);
 	change_health(ability.damage);
 }
 
@@ -170,5 +180,13 @@ void BaseAI::_area_exited(Area2D* area) {
 	if (area->get_name() == "PlayerArea") {
 		Object::cast_to<Node2D>(get_node("EnemyArea"))->set_scale(Vector2(8, 8));
 		brain.set_state(this, &wanderState);
+	}
+}
+
+void BaseAI::_particle_timeout() {
+	Godot::print("enemy::_particle_timeout");
+	Object::cast_to<Particles2D>(get_node("FireBall/FireBall"))->set_emitting(false);
+	if (health <= 0) {
+		death();
 	}
 }
