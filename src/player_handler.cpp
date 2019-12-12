@@ -127,6 +127,8 @@ void PlayerHandler::_physics_process(float delta) {
 			if(i->is_action_just_pressed("click")) {
 				Godot::print("ability_targeting click");
 				Vector3 enemy_index = Object::cast_to<MapHandler>(get_parent())->get_enemy_index_at_location(get_global_mouse_position());
+				if (enemies.size() == 0)
+					enemies = Object::cast_to<MapHandler>(get_parent())->get_enemies();
 				//Godot::print("enemy_index = " + enemy_index);
 				if (enemy_index.z > -1) {
 					Vector2 player_pos = get_global_position();
