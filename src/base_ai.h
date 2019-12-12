@@ -11,6 +11,8 @@
 #include <Area2D.hpp>
 #include <Particles2D.hpp>
 #include <Timer.hpp>
+#include <Sprite.hpp>
+#include <Texture.hpp>
 #include <string>
 #include "fsm.h"
 #include "health_bar.h"
@@ -64,6 +66,8 @@ namespace godot {
 		RunAwayState runAwayState;
 
 		Ability abil1;
+
+		Element element;
 
 		int health = 100;
 

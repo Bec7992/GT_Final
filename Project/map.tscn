@@ -1,9 +1,10 @@
-[gd_scene load_steps=6 format=2]
+[gd_scene load_steps=7 format=2]
 
 [ext_resource path="res://grass.tres" type="TileSet" id=1]
 [ext_resource path="res://bin/map_handler.gdns" type="Script" id=2]
 [ext_resource path="res://stairs_32x32_EVEN EVEN MOAR SHADOW.png" type="Texture" id=3]
 [ext_resource path="res://player.tscn" type="PackedScene" id=4]
+[ext_resource path="res://MainMenu.tscn" type="PackedScene" id=5]
 
 [sub_resource type="RectangleShape2D" id=1]
 
@@ -28,3 +29,7 @@ shape = SubResource( 1 )
 texture = ExtResource( 3 )
 
 [node name="Player" parent="TileMap" instance=ExtResource( 4 )]
+
+[node name="CanvasLayer" type="CanvasLayer" parent="."]
+
+[node name="MainMenu" parent="CanvasLayer" instance=ExtResource( 5 )]

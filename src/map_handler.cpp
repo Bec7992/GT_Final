@@ -67,7 +67,7 @@ void MapHandler::_stairs_entered(Area2D* area) {
 	if (name == "Player") {
 		Godot::print("stairs entered");
 		++floor_level;
-		map_size = Vector2(map_size.x + (2 * floor_level), map_size.y + (2 * floor_level));
+		map_size = Vector2(map_size.x + 2, map_size.y + 2);
 		make_map();
 	}
 }

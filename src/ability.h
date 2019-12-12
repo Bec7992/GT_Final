@@ -3,7 +3,7 @@
 #include <Node.hpp>
 
 enum Target {On_user, On_target, Around_user, Around_target, Line};
-enum Element {None, Fire, Water, Earth};
+enum Element {None, Fire, Ice, Earth};
 
 namespace godot {
 

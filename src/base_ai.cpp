@@ -25,7 +25,7 @@ void WanderState::execute(Node2D* parent) {
     	}
     	//path_index = 1;
     }
-    Godot::print("path index = " + String::num_int64(path_index));
+    //Godot::print("path index = " + String::num_int64(path_index));
 
 	Vector2 direction = Vector2(path[path_index].x, path[path_index].y) - (map_position);
 	Vector2 new_position = world_position + (direction * tile_size);
@@ -65,7 +65,12 @@ void AttackState::execute(Node2D* parent) {
 	    	path = Object::cast_to<MapHandler>(parent->get_node("/root/Node/TileMap"))->get_path_to_player(Vector2(map_position.x, map_position.y));
 	    }
 	    Godot::print("path size = " + String::num_int64(path.size()));
-	    Vector2 direction = Vector2(path[1].x, path[1].y) - (map_position);
+	    Vector2 direction = Vector2(0, 0);
+	    if (path.size() > 1)
+	    	direction = Vector2(path[1].x, path[1].y) - (map_position);
+	    else
+	    	direction = Vector2(path[0].x, path[0].y) - (map_position);
+
 		Vector2 new_position = world_position + (direction * tile_size);
 		parent->set_position(new_position);
 	}
@@ -112,7 +117,30 @@ void BaseAI::_init() {
 void BaseAI::_ready() {
 	brain.set_state(this, &wanderState);
 
-	abil1 = Ability("Fire Ball", "FireBall", Around_user, Fire, 5, 3, 2, 3);
+	ResourceLoader* resourceLoader = ResourceLoader::get_singleton();
+	Ref<Texture> texture = resourceLoader->load("res://red1.png");
+
+	if (rand() % 2) {
+		Godot::print("Fire Slime");
+		element = Fire;
+		abil1 = Ability("Fire Ball", "FireBall", Around_user, Fire, 5, 3, 2, 3);
+		//texture = resourceLoader->load("res://red1.png");
+		Object::cast_to<Sprite>(get_node("Sprite"))->set_texture(texture);
+	}
+	else if (rand() % 2) {
+		Godot::print("Ice Slime");
+		element = Ice;
+		abil1 = Ability("Ice Ball", "IceBall", Around_user, Ice, 5, 3, 2, 3);
+		texture = resourceLoader->load("res://blue1.png");
+		Object::cast_to<Sprite>(get_node("Sprite"))->set_texture(texture);
+	}
+	else if (rand() % 2) {
+		Godot::print("Earth Slime");
+		element = Earth;
+		abil1 = Ability("Earth Ball", "EarthBall", Around_user, Earth, 5, 3, 2, 3);
+		texture = resourceLoader->load("res://green1.png");
+		Object::cast_to<Sprite>(get_node("Sprite"))->set_texture(texture);
+	}
 
 	Node* area = get_node("EnemyArea");
 	if (area) {
@@ -162,11 +190,31 @@ void BaseAI::death() {
 void BaseAI::recieve_ability(Ability ability) {
 	//Godot::print("recieve_ability");
 	//Godot::print("damage = " + String::num_int64(ability.damage));
-	Godot::print("about to set emitting true");
+	//Godot::print("about to set emitting true");
 	Object::cast_to<Particles2D>(get_node(ability.particle_name + "/" + ability.particle_name))->set_emitting(true);
-	Godot::print("set emitting true");
+	//Godot::print("set emitting true");
 	Object::cast_to<Timer>(get_node("Timer"))->start(1);
-	change_health(ability.damage);
+
+	int damage = ability.damage;
+	if (ability.element == Fire) {
+		if (element == Ice)
+			damage = damage * 1.5;
+		else if (element == Earth)
+			damage = damage * 0.75;
+	}
+	else if (ability.element == Ice) {
+		if (element == Earth)
+			damage = damage * 1.5;
+		else if (element == Fire)
+			damage = damage * 0.75;
+	}
+	else if (ability.element == Earth) {
+		if (element == Fire)
+			damage = damage * 1.5;
+		else if (element == Ice)
+			damage = damage * 0.75;
+	}
+	change_health(damage);
 }
 
 void BaseAI::_area_entered(Area2D* area) {
@@ -186,6 +234,8 @@ void BaseAI::_area_exited(Area2D* area) {
 void BaseAI::_particle_timeout() {
 	Godot::print("enemy::_particle_timeout");
 	Object::cast_to<Particles2D>(get_node("FireBall/FireBall"))->set_emitting(false);
+	Object::cast_to<Particles2D>(get_node("IceBall/IceBall"))->set_emitting(false);
+	Object::cast_to<Particles2D>(get_node("EarthBall/EarthBall"))->set_emitting(false);
 	if (health <= 0) {
 		death();
 	}

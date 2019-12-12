@@ -10,6 +10,9 @@ void PlayerHandler::_register_methods() {
 	register_method("_ready", &PlayerHandler::_ready);
 	register_method("_stairs_entered", &PlayerHandler::_stairs_entered);
 	register_method("_particle_timeout", &PlayerHandler::_particle_timeout);
+	register_method("_fire_pressed", &PlayerHandler::_fire_pressed);
+	register_method("_ice_pressed", &PlayerHandler::_ice_pressed);
+	register_method("_earth_pressed", &PlayerHandler::_earth_pressed);
 }
 
 PlayerHandler::PlayerHandler() {
@@ -24,6 +27,8 @@ void PlayerHandler::_ready() {
 	target_pos = position;
 
 	abil1 = Ability("Fire Ball", "FireBall", Around_user, Fire, 20, 7, 3, 3);
+	abil2 = Ability("Ice Ball", "IceBall", Around_user, Ice, 20, 7, 3, 3);
+	abil3 = Ability("Earth Ball", "EarthBall", Around_user, Earth, 20, 7, 3, 3);
 
 	Node* stairs = get_parent()->get_node("Stairs");
 	if (stairs) {
@@ -33,6 +38,21 @@ void PlayerHandler::_ready() {
 	Node* timer = get_node("Timer");
 	if (timer) {
 		timer->connect("timeout", this, "_particle_timeout");
+	}
+
+	Node* fire_button = get_node("/root/Node/CanvasLayer/MainMenu/SpellBar/FireBall");
+	if (fire_button) {
+		fire_button->connect("pressed", this, "_fire_pressed");
+	}
+
+	Node* ice_button = get_node("/root/Node/CanvasLayer/MainMenu/SpellBar/IceBall");
+	if (ice_button) {
+		ice_button->connect("pressed", this, "_ice_pressed");
+	}
+
+	Node* earth_button = get_node("/root/Node/CanvasLayer/MainMenu/SpellBar/EarthBall");
+	if (earth_button) {
+		earth_button->connect("pressed", this, "_earth_pressed");
 	}
 
 	//Object::cast_to<HealthBar>(get_node("HealthBar"))->on_health_update(health);
@@ -82,6 +102,16 @@ void PlayerHandler::_physics_process(float delta) {
 			ability_index = 1;
 			ability_targeting = true;
 		}
+		else if (i->is_action_just_pressed("ability2")) {
+			Godot::print("ability2 pressed");
+			ability_index = 2;
+			ability_targeting = true;
+		}
+		else if (i->is_action_just_pressed("ability3")) {
+			Godot::print("ability3 pressed");
+			ability_index = 3;
+			ability_targeting = true;
+		}
 
 		position += motion * tile_size;//speed * delta;
 
@@ -97,7 +127,7 @@ void PlayerHandler::_physics_process(float delta) {
 			if(i->is_action_just_pressed("click")) {
 				Godot::print("ability_targeting click");
 				Vector3 enemy_index = Object::cast_to<MapHandler>(get_parent())->get_enemy_index_at_location(get_global_mouse_position());
-				Godot::print("enemy_index = " + enemy_index);
+				//Godot::print("enemy_index = " + enemy_index);
 				if (enemy_index.z > -1) {
 					Vector2 player_pos = get_global_position();
 					player_pos.x = floor(player_pos.x / 16);
@@ -105,13 +135,22 @@ void PlayerHandler::_physics_process(float delta) {
 
 					int abs_distance = abs(enemy_index.x - player_pos.x) + abs(enemy_index.y - player_pos.y);
 					if (abs_distance <= abil1.range) {
-						enemies[enemy_index.z]->recieve_ability(abil1);
+						if (ability_index == 1)
+							enemies[enemy_index.z]->recieve_ability(abil1);
+						else if (ability_index == 2)
+							enemies[enemy_index.z]->recieve_ability(abil2);
+						else if (ability_index == 3)
+							enemies[enemy_index.z]->recieve_ability(abil3);
+
 						enemy_turns();
+
+						ability_index = 0;
+						ability_targeting = false;
 					}
 				}
 
-				ability_index = 0;
-				ability_targeting = false;
+				//ability_index = 0;
+				//ability_targeting = false;
 			}
 		}
 	}
@@ -177,11 +216,6 @@ void PlayerHandler::change_health(int change) {
 	}
 
 	Object::cast_to<HealthBar>(get_node("HealthBar"))->on_health_update(health);
-
-	if (health <= 0) {
-		Godot::print("player health <= 0");
-		death();
-	}
 }
 
 void PlayerHandler::recieve_ability(Ability enemy_ability) {
@@ -202,4 +236,29 @@ void PlayerHandler::enemy_death(int index) {
 
 void PlayerHandler::_particle_timeout() {
 	Object::cast_to<Particles2D>(get_node("FireBall/FireBall"))->set_emitting(false);
+	Object::cast_to<Particles2D>(get_node("IceBall/IceBall"))->set_emitting(false);
+	Object::cast_to<Particles2D>(get_node("EarthBall/EarthBall"))->set_emitting(false);
+
+	if (health <= 0) {
+		Godot::print("player health <= 0");
+		death();
+	}
+}
+
+void PlayerHandler::_fire_pressed() {
+	Godot::print("_fire_pressed()");
+	ability_index = 1;
+	ability_targeting = true;
+}
+
+void PlayerHandler::_ice_pressed() {
+	Godot::print("_ice_pressed()");
+	ability_index = 2;
+	ability_targeting = true;
+}
+
+void PlayerHandler::_earth_pressed() {
+	Godot::print("_earth_pressed()");
+	ability_index = 3;
+	ability_targeting = true;
 }

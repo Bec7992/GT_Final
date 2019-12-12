@@ -24,6 +24,8 @@ namespace godot {
 		bool just_moved = false;
 
 		Ability abil1;
+		Ability abil2;
+		Ability abil3;
 		int ability_index = 0;
 		bool ability_targeting = false;
 
@@ -51,6 +53,9 @@ namespace godot {
 		void death();
 		void enemy_death(int index);
 		void _particle_timeout();
+		void _fire_pressed();
+		void _ice_pressed();
+		void _earth_pressed();
 	};
 }
 
